@@ -60,6 +60,45 @@ class Database {
     }
 
     
+    private function create_log_table() {
+        // here: create table if not exist.
+        try {
+            $conn = $this->create_connection();
+            if (!$this->check_if_table_exist($conn, 'logs')) {
+                // sql to create table
+                $sql = "CREATE TABLE logs (
+                    log_id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                    sample_id VARCHAR(40) NOT NULL,
+                    nid_id INT(11),
+                    nid_file VARCHAR(40) NOT NULL,
+                    entry_date TIMESTAMP,
+                    log_comment blob NOT NULL
+                    )";
+                // use exec() because no results are returned
+                $conn->exec($sql);
+                $sql = "
+                ALTER TABLE `logs`  
+                ADD CONSTRAINT `FK_logs_samples` 
+                    FOREIGN KEY (`sample_id`) REFERENCES `samples`(`sample_id`) 
+                        ON UPDATE CASCADE 
+                        ON DELETE CASCADE;
+                ADD CONSTRAINT `FK_logs_nid_files` 
+                    FOREIGN KEY (`nid_id`) REFERENCES `nid_files`(`nid_id`) 
+                        ON UPDATE CASCADE 
+                        ON DELETE CASCADE;
+                ";
+                $conn->exec($sql);
+                echo "log table created successfully";
+            } else {
+                // echo "log table already exist.";
+            }
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+        $conn = null;
+    }
+
+    
     private function create_nid_table() {
         // here: create table if not exist.
         try {
