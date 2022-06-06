@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    
+    <!--    <link href="style.css" rel="stylesheet"> -->
+    <title>File Storage</title>
+</head>
+
+<body>
+    <div class="wrapper fadeInDown -hidden" id="formWrapper">
+        <div id="formContent">
+
+            <h2 class="fadeIn first">File Storage</h2>
+
+            <!-- Login Form -->
+            <form>
+                <input type="text" id="date_of_recording" class="fadeIn second" name="date_of_recording" placeholder="Capture Date">
+                <input type="text" id="nid_name" class="fadeIn second" name="nid_name" placeholder="File Name">
+                <input type="text" id="nr_of_lines" class="fadeIn second" name="nr_of_lines" placeholder="Number of Lines">
+                <input type="text" id="sample_id" class="fadeIn third" name="sample_id" placeholder="Sample ID">
+                <input type="file" id="file_input" name="file_input" placeholder="File Input">
+                <input type="submit" name="store_file" id="store_file" value="Submit to Storage">
+            </form>
+            
+            <!--            ORIGINAL
+            <form>
+                <input type="text" id="login" class="fadeIn second" name="login" placeholder="login">
+                <input type="text" id="password" class="fadeIn third" name="login" placeholder="password">
+                <input type="submit" id="submit" class="fadeIn fourth" value="Anmelden">
+            </form>
+            -->
+            <div id="output"></div>
+        </div>
+    </div>
+
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
+    <script>
+        function store_file_func() {
+            var date_of_recording = document.getElementById("date_of_recording").value;
+            var sample_id = document.getElementById("sample_id").value;
+            var nid_name = document.getElementById("nid_name").value;
+            var nr_of_lines = document.getElementById("nr_of_lines").value;
+            load_file_from_file_system();
+        }
+
+        function load_file_from_file_system() {
+            file_input = document.getElementById("file_input")
+            nid_file = file_input.files;
+            console.log(nid_file)
+
+            /*            
+            const fileInput = document.getElementById('file_input_button');
+            fileInput.onchange = () => {
+                const selectedFile = fileInput.files[0];
+                var nid_file = selectedFile; 
+            } */
+
+
+            var url = new URL('http://localhost/nid_upload.php')
+            var params = {
+                date_of_recording_param: date_of_recording,
+                sample_id_param: sample_id,
+                nr_of_lines_param: nr_of_lines,
+                nid_name_param: nid_name,
+                nid_file_param: nid_file
+            }
+            url.search = new URLSearchParams(params).toString();
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const output = document.getElementById("output");
+                    const message = data.message;
+                    let color_class = 'alert-danger';
+
+                    output.innerHTML = "";
+
+                    if (data.success) {
+                        color_class = 'alert-success';
+                    }
+
+                    if (data.success) {
+                        output.innerHTML = '<div class="alert ' + color_class + '" role="alert">Registration successful for ' + data.nid_name_param + '</div>';
+                        location.reload();
+                    } else {
+                        output.innerHTML = '<div class="alert ' + color_class + '" role="alert">' + message + '</div>';
+                    }
+                    console.log(data.nid_name);
+                    localStorage.setItem("file_name", data.nid_name_param);
+                });
+        }
+
+        document.getElementById("store_file").addEventListener("click", (event) => {
+            event.preventDefault();
+            store_file_func();
+        });
+
+        const username = localStorage.getItem('username');
+        let wrapper = null;
+        /*
+        if (username) {
+            console.log('show hello box');
+            wrapper = document.getElementById("helloWrapper");
+            const usernameBox = document.getElementById('helloUsername');
+            usernameBox.innerHTML = username;
+        }
+
+        else {
+            wrapper = document.getElementById("formWrapper");
+        }
+        */
+    </script>
+
+</body>
+
+</html>

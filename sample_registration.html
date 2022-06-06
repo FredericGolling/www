@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    
+    <!--    <link href="style.css" rel="stylesheet"> -->
+    <title>Sample Registration</title>
+</head>
+
+<body>
+    <div class="wrapper fadeInDown -hidden" id="formWrapper">
+        <div id="formContent">
+
+            <h2 class="fadeIn first">Sample Registration</h2>
+
+            <!-- Login Form -->
+            <form>
+                <input type="text" id="sample_name" class="fadeIn second" name="sample_name" placeholder="sample name">
+                <input type="text" id="material" class="fadeIn third" name="material" placeholder="Material">
+                <input type="text" id="container_number" class="fadeIn third" name="container_number" placeholder="Container">
+                <input type="submit" id="register_sample" class="fadeIn fourth" value="Register Sample">
+            </form>
+            <!--            ORIGINAL
+            <form>
+                <input type="text" id="login" class="fadeIn second" name="login" placeholder="login">
+                <input type="text" id="password" class="fadeIn third" name="login" placeholder="password">
+                <input type="submit" id="submit" class="fadeIn fourth" value="Anmelden">
+            </form>
+            -->
+            <div id="output"></div>
+        </div>
+    </div>
+
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
+    <script>
+        function register_sample_func() {
+            var sample_name = document.getElementById("sample_name").value;
+            var material = document.getElementById("material").value;
+            var container_number = document.getElementById("container_number").value;
+
+
+            var url = new URL('http://localhost/sample_registration.php')
+            var params = {
+                sample_name: sample_name,
+                material: material,
+                container_number: container_number,
+            }
+            url.search = new URLSearchParams(params).toString();
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const output = document.getElementById("output");
+                    const message = data.message;
+                    let color_class = 'alert-danger';
+
+                    output.innerHTML = "";
+
+                    if (data.success) {
+                        color_class = 'alert-success';
+                    }
+
+                    if (data.success) {
+                        output.innerHTML = '<div class="alert ' + color_class + '" role="alert">Registration successful for ' + data.sample_name + '</div>';
+                        location.reload();
+                    } 
+                    else {
+                        output.innerHTML = '<div class="alert ' + color_class + '" role="alert">' + message + '</div>';
+                    }
+                    console.log(data.sample_name);
+                    localStorage.setItem("sample_name", data.sample_name);
+                });
+        }
+
+        document.getElementById("register_sample").addEventListener("click", (event) => {
+            event.preventDefault();
+            register_sample_func();
+        });
+
+        const username = localStorage.getItem('username');
+        let wrapper = null;
+        /*
+        if (username) {
+            console.log('show hello box');
+            wrapper = document.getElementById("helloWrapper");
+            const usernameBox = document.getElementById('helloUsername');
+            usernameBox.innerHTML = username;
+        }
+
+        else {
+            wrapper = document.getElementById("formWrapper");
+        }
+        */
+    </script>
+
+</body>
+
+</html>
