@@ -157,12 +157,11 @@ class Database {
     }
 
 
-
-
-    
     public function prepare_registration() {
         $this->create_sample_table();
         $this->create_nid_table();
+        $this->create_date_table();
+        $this->create_log_table();
         return true;
     }
     
@@ -241,9 +240,23 @@ class Database {
                 DROP FOREIGN KEY `FK_nid_files_samples`;';
             $conn->exec($sql);
 
+            $sql = 'ALTER TABLE `logs`
+                DROP FOREIGN KEY `FK_logs_samples`;';
+            $conn->exec($sql);
+
+            $sql = 'ALTER TABLE `logs`
+                DROP FOREIGN KEY `FK_logs_nid_files`;';
+            $conn->exec($sql);
+
             $sql = 'DROP TABLE nid_files';
             $conn->exec($sql);
 
+            $sql = 'DROP TABLE logs';
+            $conn->exec($sql);
+            
+            $sql = 'DROP TABLE dates';
+            $conn->exec($sql);
+            
             $sql = 'DROP TABLE samples';
             $conn->exec($sql);
 
