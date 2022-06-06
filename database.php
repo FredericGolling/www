@@ -98,6 +98,29 @@ class Database {
         $conn = null;
     }
 
+
+    private function create_date_table() {
+        // here: create table if not exist.
+        try {
+            $conn = $this->create_connection();
+            if (!$this->check_if_table_exist($conn, 'dates')) {
+                // sql to create table
+                $sql = "CREATE TABLE dates (
+                    date_id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                    'date' DATE,
+                    )";
+                // use exec() because no results are returned
+                $conn->exec($sql);
+                echo "date table created successfully";
+            } else {
+                // echo "log table already exist.";
+            }
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+        $conn = null;
+    }
+
     
     private function create_nid_table() {
         // here: create table if not exist.
