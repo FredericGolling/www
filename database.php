@@ -68,9 +68,9 @@ class Database {
                 // sql to create table
                 $sql = "CREATE TABLE logs (
                     log_id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-                    sample_id VARCHAR(40) NOT NULL,
+                    sample_id INT(11) NOT NULL,
                     nid_id INT(11),
-                    nid_file VARCHAR(40) NOT NULL,
+                    nid_file MEDIUMBLOB NOT NULL,
                     entry_date TIMESTAMP,
                     log_comment blob NOT NULL
                     )";

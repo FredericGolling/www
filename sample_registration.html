@@ -25,7 +25,11 @@
                 <input type="text" id="sample_name" class="fadeIn second" name="sample_name" placeholder="sample name">
                 <input type="text" id="material" class="fadeIn third" name="material" placeholder="Material">
                 <input type="text" id="container_number" class="fadeIn third" name="container_number" placeholder="Container">
+                
                 <input type="submit" id="register_sample" class="fadeIn fourth" value="Register Sample">
+                <input type="submit" name="go_to_nid_upload" id="go_to_nid_upload" value="Go to nid upload">
+
+            
             </form>
             <!--            ORIGINAL
             <form>
@@ -89,6 +93,11 @@
             event.preventDefault();
             register_sample_func();
         });
+
+        document.getElementById("go_to_nid_upload").addEventListener("click", (event) => {
+                    event.preventDefault();
+                    window.location.replace("http://localhost/nid_upload.html")
+                });
 
         const username = localStorage.getItem('username');
         let wrapper = null;

@@ -28,6 +28,9 @@
                 <input type="text" id="sample_id" class="fadeIn third" name="sample_id" placeholder="Sample ID">
                 <input type="file" id="file_input" name="file_input" placeholder="File Input">
                 <input type="submit" name="store_file" id="store_file" value="Submit to Storage">
+
+                <input type="submit" name="go_to_sample_registration" id="go_to_sample_registration" value="Go to sample Registration">
+                
             </form>
             
             <!--            ORIGINAL
@@ -107,6 +110,11 @@
         document.getElementById("store_file").addEventListener("click", (event) => {
             event.preventDefault();
             store_file_func();
+        });
+
+        document.getElementById("go_to_sample_registration").addEventListener("click", (event) => {
+            event.preventDefault();
+            window.location.replace("http://localhost/sample_registration.html")
         });
 
         const username = localStorage.getItem('username');
