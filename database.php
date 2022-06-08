@@ -68,7 +68,7 @@ class Database {
                 // sql to create table
                 $sql = "CREATE TABLE logs (
                     log_id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-                    sample_id INT(11) NOT NULL,
+                    sample_id INT(11) UNSIGNED,
                     nid_id INT(11),
                     nid_file MEDIUMBLOB NOT NULL,
                     entry_date TIMESTAMP,
@@ -82,6 +82,10 @@ class Database {
                     FOREIGN KEY (`sample_id`) REFERENCES `samples`(`sample_id`) 
                         ON UPDATE CASCADE 
                         ON DELETE CASCADE;
+                ";
+                $conn->exec($sql);           
+                $sql = "                
+                ALTER TABLE `logs`  
                 ADD CONSTRAINT `FK_logs_nid_files` 
                     FOREIGN KEY (`nid_id`) REFERENCES `nid_files`(`nid_id`) 
                         ON UPDATE CASCADE 
