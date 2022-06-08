@@ -107,7 +107,7 @@ class Database {
                 // sql to create table
                 $sql = "CREATE TABLE dates (
                     date_id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-                    'date' DATE,
+                    date_str VARCHAR(10)
                     )";
                 // use exec() because no results are returned
                 $conn->exec($sql);
@@ -164,6 +164,8 @@ class Database {
         $this->create_log_table();
         return true;
     }
+
+
     
     public function store_file($nid_name, $nr_of_lines, $sample_id, $date_of_recording, $nid_file) {
         // here: insert a new nid_file into the database.
@@ -196,8 +198,6 @@ class Database {
 
         return false;
     }
-
-
 
 
     public function register_sample($sample_name, $material, $container_number) {
